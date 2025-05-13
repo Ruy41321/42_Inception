@@ -1,0 +1,81 @@
+networks:
+  nginx-wp:
+  wp-db:
+
+volumes:
+  wp-data:
+  db-data:
+
+services:
+  nginx:
+    container_name: nginx
+    image: nginx:inception
+    build: requirements/nginx/.
+    ports:
+      - "443:443"
+    env_file:
+      - .env
+    networks:
+      - nginx-wp
+    volumes:
+      - wp-data:/var/www/html
+    depends_on:
+      - wordpress
+      - mariadb
+    restart: on-failure
+    healthcheck:
+      test: ["CMD", "nginx", "-t"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+  wordpress:
+    container_name: wordpress
+    image: wordpress:inception
+    env_file:
+      - .env
+    build: requirements/wordpress/.
+    volumes:
+      - wp-data:/var/www/html
+    networks:
+      - nginx-wp
+      - wp-db
+    depends_on:
+      - mariadb
+    restart: on-failure
+    healthcheck:
+      test: ["CMD", "php-fpm82", "-t"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+  mariadb:
+    container_name: mariadb
+    image: mariadb:inception
+    build: ./requirements/mariadb/.
+    env_file:
+      - .env
+    volumes:
+      - db-data:/var/lib/mysql
+    networks:
+      - wp-db
+    restart: on-failure
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${MYSQL_ROOT_PASSWORD}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+  # phpmyadmin:
+  #   image: phpmyadmin/phpmyadmin:latest
+  #   container_name: phpmyadmin
+  #   restart: always
+  #   networks:
+  #     - wp-db
+  #   ports:
+  #     - "8080:80"
+  #   environment:
+  #     PMA_HOST: mariadb
+  #     PMA_PORT: 3306
+  #   depends_on:
+  #     - mariadb
