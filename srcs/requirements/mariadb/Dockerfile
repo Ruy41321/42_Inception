@@ -4,6 +4,7 @@ RUN apk update && apk add --no-cache bash \
     mariadb mariadb-client && \
     mkdir -p /var/lib/mysql && \
     chown -R mysql:mysql /var/lib/mysql && \
+	chmod 755 /var/lib/mysql && \
     mysql_install_db --user=mysql --datadir=/var/lib/mysql
 
 RUN mkdir -p /run/mysqld && chown -R mysql:mysql /run/mysqld

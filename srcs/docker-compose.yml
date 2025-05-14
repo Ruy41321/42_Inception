@@ -4,7 +4,17 @@ networks:
 
 volumes:
   wp-data:
+    driver: local
+    driver_opts:
+      type: none
+      device: /home/lpennisi/data/wordpress
+      o: bind
   db-data:
+    driver: local
+    driver_opts:
+      type: none
+      device: /home/lpennisi/data/mariadb
+      o: bind
 
 services:
   nginx:
