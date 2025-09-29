@@ -1,0 +1,11 @@
+cambiare il domain name in lpennisi.42.fr
+?controllare versione alpine
+
+Your volumes will be available in the /home/login/data folder of the
+host machine using Docker. Of course, you have to replace the login
+with yours.
+
+?il file .env deve essere creato durante l eval e non pushato?
+?come accedere al database?
+
+?Perche claudio ha messo quei 2 user alla fine della configurazione del db?
