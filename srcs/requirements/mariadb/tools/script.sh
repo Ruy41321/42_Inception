@@ -7,7 +7,9 @@ cat << EOF > /initdb.d/init.sql
 CREATE DATABASE IF NOT EXISTS wordpress;
 
 -- Create a non-root user and grant privileges
+CREATE USER IF NOT EXISTS '$MYSQL_USER'@'localhost' IDENTIFIED BY '$MYSQL_PASSWORD';
 CREATE USER IF NOT EXISTS '$MYSQL_USER'@'%' IDENTIFIED BY '$MYSQL_PASSWORD';
+GRANT ALL PRIVILEGES ON wordpress.* TO '$MYSQL_USER'@'localhost';
 GRANT ALL PRIVILEGES ON wordpress.* TO '$MYSQL_USER'@'%';
 
 -- Set root password and allow root access from any host
