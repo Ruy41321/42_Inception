@@ -7,5 +7,8 @@ with yours.
 
 Fatto - ?come accedere al database?
 
-boh non penso serve - ?Perche claudio ha messo quei 2 user alla fine della configurazione del db?
-?il file .env deve essere creato durante l eval e non pushato?
+Fatto - vedere il fatto del pid 1
+
+------------------------------
+
+?il file .env deve essere creato durante l eval e non pushato? esatto

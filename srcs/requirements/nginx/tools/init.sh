@@ -96,6 +96,11 @@ http {
         root /var/www/html;
         index index.php index.html index.htm;
 
+        # === Main Location ===
+        location / {
+            try_files \$uri \$uri/ /index.php?\$args;
+        }
+
       	# === PHP Processing ===
 		location ~ \.php$ {
 			# Parses PHP URLs for proper routing

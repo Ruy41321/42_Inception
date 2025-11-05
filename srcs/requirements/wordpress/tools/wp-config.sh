@@ -1,6 +1,21 @@
 #!/bin/bash
 set -e
 
+# Check if secrets exist
+if [ ! -f /run/secrets/mysql_user ]; then
+    echo "❌ ERROR: Secret file 'mysql_user' not found!"
+    exit 1
+fi
+
+if [ ! -f /run/secrets/mysql_password ]; then
+    echo "❌ ERROR: Secret file 'mysql_password' not found!"
+    exit 1
+fi
+
+# Load secrets into environment variables
+export MYSQL_USER=$(cat /run/secrets/mysql_user)
+export MYSQL_PASSWORD=$(cat /run/secrets/mysql_password)
+
 CONFIG_FILE=/var/www/html/wp-config.php
 KEYS=$(curl -s https://api.wordpress.org/secret-key/1.1/salt/)
 

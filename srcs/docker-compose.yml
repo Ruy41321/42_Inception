@@ -16,6 +16,27 @@ volumes:
       device: /home/lpennisi/data/mariadb
       o: bind
 
+secrets:
+  mysql_root_password:
+    file: ../secrets/mysql_root_password.txt
+  mysql_user:
+    file: ../secrets/mysql_user.txt
+  mysql_password:
+    file: ../secrets/mysql_password.txt
+  wp_admin_usr:
+    file: ../secrets/wp_admin_usr.txt
+  wp_admin_pwd:
+    file: ../secrets/wp_admin_pwd.txt
+  wp_admin_email:
+    file: ../secrets/wp_admin_email.txt
+  wp_usr:
+    file: ../secrets/wp_usr.txt
+  wp_email:
+    file: ../secrets/wp_email.txt
+  wp_pwd:
+    file: ../secrets/wp_pwd.txt
+
+
 services:
   nginx:
     container_name: nginx
@@ -44,6 +65,16 @@ services:
     image: wordpress:inception
     env_file:
       - .env
+    secrets:
+      - wp_admin_usr
+      - wp_admin_pwd
+      - wp_admin_email
+      - wp_usr
+      - wp_email
+      - wp_pwd
+      - mysql_root_password
+      - mysql_user
+      - mysql_password
     build: requirements/wordpress/.
     volumes:
       - wp-data:/var/www/html
@@ -63,8 +94,10 @@ services:
     container_name: mariadb
     image: mariadb:inception
     build: ./requirements/mariadb/.
-    env_file:
-      - .env
+    secrets:
+      - mysql_root_password
+      - mysql_user
+      - mysql_password
     volumes:
       - db-data:/var/lib/mysql
     networks:

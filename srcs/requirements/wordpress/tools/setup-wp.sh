@@ -1,5 +1,23 @@
 #!/bin/bash
 
+# Check if secrets exist
+for secret in mysql_user mysql_password wp_admin_usr wp_admin_pwd wp_admin_email wp_usr wp_email wp_pwd; do
+    if [ ! -f "/run/secrets/$secret" ]; then
+        echo "❌ ERROR: Secret file '$secret' not found!"
+        exit 1
+    fi
+done
+
+# Load secrets into environment variables
+export MYSQL_USER=$(cat /run/secrets/mysql_user)
+export MYSQL_PASSWORD=$(cat /run/secrets/mysql_password)
+export WP_ADMIN_USR=$(cat /run/secrets/wp_admin_usr)
+export WP_ADMIN_PWD=$(cat /run/secrets/wp_admin_pwd)
+export WP_ADMIN_EMAIL=$(cat /run/secrets/wp_admin_email)
+export WP_USR=$(cat /run/secrets/wp_usr)
+export WP_EMAIL=$(cat /run/secrets/wp_email)
+export WP_PWD=$(cat /run/secrets/wp_pwd)
+
 #modyfing www.conf to set up php-fpm
 
 sed -i -r 's|^user = .*$|user = www-data|' /etc/php82/php-fpm.d/www.conf
@@ -76,4 +94,4 @@ EOSQL
 # mkdir -p /run/php
 # chown -R www-data:www-data /run/php
 
-php-fpm82 -F
+exec php-fpm82 -F

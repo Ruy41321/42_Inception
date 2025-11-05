@@ -1,5 +1,26 @@
 #!/bin/bash
 
+# Check if secrets exist
+if [ ! -f /run/secrets/mysql_root_password ]; then
+    echo "❌ ERROR: Secret file 'mysql_root_password' not found!"
+    exit 1
+fi
+
+if [ ! -f /run/secrets/mysql_user ]; then
+    echo "❌ ERROR: Secret file 'mysql_user' not found!"
+    exit 1
+fi
+
+if [ ! -f /run/secrets/mysql_password ]; then
+    echo "❌ ERROR: Secret file 'mysql_password' not found!"
+    exit 1
+fi
+
+# Load secrets into environment variables
+export MYSQL_ROOT_PASSWORD=$(cat /run/secrets/mysql_root_password)
+export MYSQL_USER=$(cat /run/secrets/mysql_user)
+export MYSQL_PASSWORD=$(cat /run/secrets/mysql_password)
+
 mkdir -p initdb.d
 
 cat << EOF > /initdb.d/init.sql
